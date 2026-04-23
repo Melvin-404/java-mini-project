@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Attendance Management System</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+<div class="app-shell">
+    <aside class="sidebar">
+        <div class="brand">
+            <div class="brand-badge">SA</div>
+            <div>
+                <h1>Student Attendance Advisor</h1>
+                <p>Smart attendance tracking with guidance.</p>
+            </div>
+        </div>
+        <nav class="nav-menu">
+            <a class="nav-link active" href="index.html">Home</a>
+            <a class="nav-link" href="addStudent.html">Add Student</a>
+            <a class="nav-link" href="markAttendance.html">Mark Attendance</a>
+            <a class="nav-link" href="dashboard">Dashboard</a>
+            <a class="nav-link" href="records">View Records</a>
+        </nav>
+    </aside>
+
+    <main class="main-content">
+        <div class="topbar">
+            <div>
+                <h2 class="page-title">Smart Attendance Management System</h2>
+                <p class="page-subtitle">
+                    A clean academic dashboard that helps students understand attendance health, predict outcomes,
+                    and decide how many classes they need to attend next.
+                </p>
+            </div>
+            <a class="button" href="dashboard">Open Dashboard</a>
+        </div>
+
+        <section class="hero-grid">
+            <div class="surface-card">
+                <h3 class="section-title">Built for student decisions</h3>
+                <p class="section-subtext">
+                    Track attendance, monitor low-percentage alerts, predict what happens if the next class is missed,
+                    and estimate how many classes are needed to reach 75%.
+                </p>
+                <div class="grid-2">
+                    <div class="metric-card">
+                        <div class="metric-label">Attendance advisor</div>
+                        <p class="metric-value">75%</p>
+                        <p class="muted">Target threshold highlighted across the dashboard.</p>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-label">Actionable prediction</div>
+                        <p class="metric-value">Next N</p>
+                        <p class="muted">See how attending future classes improves percentage.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="surface-card">
+                <h3 class="section-title">Quick Actions</h3>
+                <div class="info-list">
+                    <a class="button" href="addStudent.html">Add a Student</a>
+                    <a class="button secondary" href="markAttendance.html">Mark Daily Attendance</a>
+                    <a class="button secondary" href="records">View Attendance History</a>
+                </div>
+            </div>
+        </section>
+
+        <section class="grid-4" style="margin-top: 20px;">
+            <div class="surface-card">
+                <h3 class="section-title">Attendance Percentage</h3>
+                <p class="muted">See current academic standing at a glance.</p>
+            </div>
+            <div class="surface-card">
+                <h3 class="section-title">Required Classes</h3>
+                <p class="muted">Find the exact number of classes needed to reach 75%.</p>
+            </div>
+            <div class="surface-card">
+                <h3 class="section-title">Safe Bunk Limit</h3>
+                <p class="muted">Understand how many classes can be missed safely.</p>
+            </div>
+            <div class="surface-card">
+                <h3 class="section-title">Alerts & Trends</h3>
+                <p class="muted">Review streaks, last five records, weekly and monthly summaries.</p>
+            </div>
+        </section>
+    </main>
+</div>
+</body>
+</html>

@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Student</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+<div class="app-shell">
+    <aside class="sidebar">
+        <div class="brand">
+            <div class="brand-badge">SA</div>
+            <div>
+                <h2>Student Attendance Advisor</h2>
+                <p>Manage your student roster.</p>
+            </div>
+        </div>
+        <nav class="nav-menu">
+            <a class="nav-link" href="index.html">Home</a>
+            <a class="nav-link active" href="addStudent.html">Add Student</a>
+            <a class="nav-link" href="markAttendance.html">Mark Attendance</a>
+            <a class="nav-link" href="dashboard">Dashboard</a>
+            <a class="nav-link" href="records">View Records</a>
+        </nav>
+    </aside>
+
+    <main class="main-content">
+        <div class="topbar">
+            <div>
+                <h1 class="page-title">Student Management</h1>
+                <p class="page-subtitle">Add student details and keep the class list organized with name and USN.</p>
+            </div>
+        </div>
+
+        <div class="grid-2">
+            <section class="surface-card">
+                <h3 class="section-title">Add Student</h3>
+                <p class="section-subtext">Create a new student record for attendance tracking.</p>
+
+                <form action="add-student" method="post" class="input-grid">
+                    <div class="input-row">
+                        <label for="name">Student Name</label>
+                        <input id="name" name="name" type="text" placeholder="Enter full name" required>
+                    </div>
+                    <div class="input-row">
+                        <label for="usn">USN</label>
+                        <input id="usn" name="usn" type="text" placeholder="Enter university serial number" required>
+                    </div>
+                    <input type="submit" value="Add Student">
+                </form>
+
+                <div id="messageBox"></div>
+            </section>
+
+            <section class="surface-card">
+                <h3 class="section-title">Student List</h3>
+                <p class="section-subtext">Live view of students available for attendance operations.</p>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>USN</th>
+                        </tr>
+                        </thead>
+                        <tbody id="studentTableBody">
+                        <tr>
+                            <td colspan="2" class="muted">Loading students...</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </div>
+    </main>
+</div>
+
+<script>
+    const params = new URLSearchParams(window.location.search);
+    const message = params.get('message');
+    if (message) {
+        document.getElementById('messageBox').innerHTML = '<div class="message">' + message + '</div>';
+    }
+
+    fetch('api/students')
+        .then(response => response.json())
+        .then(students => {
+            const tbody = document.getElementById('studentTableBody');
+            if (!students.length) {
+                tbody.innerHTML = '<tr><td colspan="2" class="muted">No students added yet.</td></tr>';
+                return;
+            }
+
+            tbody.innerHTML = students
+                .map(student => '<tr><td>' + student.name + '</td><td>' + student.usn + '</td></tr>')
+                .join('');
+        })
+        .catch(() => {
+            document.getElementById('studentTableBody').innerHTML =
+                '<tr><td colspan="2" class="muted">Unable to load students. Check database connection.</td></tr>';
+        });
+</script>
+</body>
+</html>

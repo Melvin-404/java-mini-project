@@ -1,0 +1,14 @@
+com\attendance\model\AttendanceRecord.class
+com\attendance\model\Student.class
+com\attendance\util\DBConnection.class
+com\attendance\dao\StudentDAO.class
+com\attendance\model\WeeklySummary.class
+com\attendance\service\AnalyticsService.class
+com\attendance\servlet\StudentsApiServlet.class
+com\attendance\servlet\AddStudentServlet.class
+com\attendance\servlet\DashboardServlet.class
+com\attendance\model\StudentDashboard.class
+com\attendance\dao\AttendanceDAO.class
+com\attendance\servlet\AttendanceServlet.class
+com\attendance\model\MonthlySummary.class
+com\attendance\servlet\RecordsServlet.class

@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mark Attendance</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+<div class="app-shell">
+    <aside class="sidebar">
+        <div class="brand">
+            <div class="brand-badge">SA</div>
+            <div>
+                <h2>Student Attendance Advisor</h2>
+                <p>Update daily class status.</p>
+            </div>
+        </div>
+        <nav class="nav-menu">
+            <a class="nav-link" href="index.html">Home</a>
+            <a class="nav-link" href="addStudent.html">Add Student</a>
+            <a class="nav-link active" href="markAttendance.html">Mark Attendance</a>
+            <a class="nav-link" href="dashboard">Dashboard</a>
+            <a class="nav-link" href="records">View Records</a>
+        </nav>
+    </aside>
+
+    <main class="main-content">
+        <div class="topbar">
+            <div>
+                <h1 class="page-title">Attendance Management</h1>
+                <p class="page-subtitle">Mark attendance as Present, Absent, or Late and store it with date.</p>
+            </div>
+        </div>
+
+        <div class="grid-2">
+            <section class="surface-card">
+                <h3 class="section-title">Mark Attendance</h3>
+                <p class="section-subtext">Choose a student, date, and attendance status.</p>
+
+                <form action="mark-attendance" method="post" class="input-grid">
+                    <div class="input-row">
+                        <label for="studentId">Student</label>
+                        <select id="studentId" name="studentId" required>
+                            <option value="">Loading students...</option>
+                        </select>
+                    </div>
+                    <div class="input-row">
+                        <label for="attendanceDate">Date</label>
+                        <input id="attendanceDate" name="attendanceDate" type="date" required>
+                    </div>
+                    <div class="input-row">
+                        <label for="status">Status</label>
+                        <select id="status" name="status" required>
+                            <option value="PRESENT">Present</option>
+                            <option value="ABSENT">Absent</option>
+                            <option value="LATE">Late</option>
+                        </select>
+                    </div>
+                    <input type="submit" value="Save Attendance">
+                </form>
+
+                <div id="messageBox"></div>
+            </section>
+
+            <section class="surface-card">
+                <h3 class="section-title">Attendance Guidance</h3>
+                <div class="info-list">
+                    <div class="metric-card">
+                        <div class="metric-label">Present</div>
+                        <p class="muted">Counts as attended and improves percentage.</p>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-label">Late</div>
+                        <p class="muted">Tracked separately and still counted as attended in analytics.</p>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-label">Absent</div>
+                        <p class="muted">Reduces attendance percentage and safe bunk margin.</p>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+</div>
+
+<script>
+    document.getElementById('attendanceDate').value = new Date().toISOString().split('T')[0];
+
+    const params = new URLSearchParams(window.location.search);
+    const message = params.get('message');
+    if (message) {
+        document.getElementById('messageBox').innerHTML = '<div class="message">' + message + '</div>';
+    }
+
+    fetch('api/students')
+        .then(response => response.json())
+        .then(students => {
+            const select = document.getElementById('studentId');
+            if (!students.length) {
+                select.innerHTML = '<option value="">Add students first</option>';
+                return;
+            }
+
+            select.innerHTML = '<option value="">Select student</option>' +
+                students.map(student =>
+                    '<option value="' + student.id + '">' + student.name + ' (' + student.usn + ')</option>'
+                ).join('');
+        })
+        .catch(() => {
+            document.getElementById('studentId').innerHTML = '<option value="">Unable to load students</option>';
+        });
+</script>
+</body>
+</html>
