@@ -9,6 +9,8 @@ com\attendance\servlet\AddStudentServlet.class
 com\attendance\servlet\DashboardServlet.class
 com\attendance\model\StudentDashboard.class
 com\attendance\dao\AttendanceDAO.class
+com\attendance\util\DBConnectionTest.class
+com\attendance\util\AppInitializer.class
 com\attendance\servlet\AttendanceServlet.class
 com\attendance\model\MonthlySummary.class
 com\attendance\servlet\RecordsServlet.class

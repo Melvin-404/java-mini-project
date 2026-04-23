@@ -1,0 +1,14 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "Build Java Project",
+			"type": "shell",
+			"command": "cd c:\\projects\\java-mini-project && mvn clean package -DskipTests",
+			"problemMatcher": [
+				"$java"
+			],
+			"group": "build"
+		}
+	]
+}
