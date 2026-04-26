@@ -4,13 +4,15 @@ A professional-grade web-based attendance management system built with Java Serv
 
 ## Features
 
+✓ **Role-Based Access Control (RBAC)** - Secure login system with Teacher and Student roles  
 ✓ **Zero Setup Database** - H2 embedded database with automatic schema initialization  
-✓ **Student Management** - Add, view, and manage student records  
-✓ **Attendance Marking** - Record daily attendance with status (Present, Absent, Late)  
+✓ **Student Management** - Add, view, and manage student records (Teacher only)  
+✓ **Attendance Marking** - Record daily attendance with status (Present, Absent, Late) (Teacher only)  
 ✓ **Analytics Dashboard** - Real-time attendance metrics and predictions  
 ✓ **Risk Assessment** - Color-coded danger levels (Safe, Risk, Danger)  
 ✓ **Performance Metrics** - Consistency scoring and attendance streaks  
 ✓ **Flexible Configuration** - Easy switch between H2 (default) and PostgreSQL  
+✓ **Session Management** - Secure authentication with cache prevention  
 
 ## Technology Stack
 
@@ -105,54 +107,14 @@ db.h2.password=
 ## Application Pages
 
 | URL | Purpose |
-|-----|---------|
-| `/` | Home page with navigation |
-| `/addStudent.html` | Add new student |
-| `/markAttendance.html` | Record daily attendance |
+|-----|---------
+| `/addStudent.html` | Add new stud
+| `/markAttendance.html` | Record daily 
 | `/dashboard` | View analytics and metrics |
-| `/records` | View detailed attendance records |
+| `/records` | View detailed attendance recor
+t 
 
-## Attendance Metrics
-
-### Danger Levels
-- **SAFE**: Attendance ≥ 75%
-- **RISK**: Attendance 65-75%
-- **DANGER**: Attendance < 65%
-
-### Metrics Tracked
-- Attendance percentage (PRESENT + LATE count)
-- Classes attended vs total classes
-- Safe bunk count (classes that can be skipped while maintaining 75%)
-- Required classes to reach 75% target
-- Attendance streak (consecutive present days)
-- Consistency score (stability of attendance patterns)
-- Weekly and monthly summaries
-
-## Building and Deployment
-
-### Build WAR File
-```bash
-./mvnw clean package
-```
-
-Creates `target/smart-attendance-management.war`
-
-### Deploy to Tomcat
-1. Copy WAR file to `$TOMCAT_HOME/webapps/`
-2. Start Tomcat
-3. Access at `http://localhost:8080/smart-attendance-management`
-
-### Run Embedded (for testing)
-```bash
-./mvnw clean compile
-java -cp "target/classes:$HOME/.m2/repository/com/h2database/h2/2.2.224/h2-2.2.224.jar" \
-     com.attendance.util.DBConnectionTest
-```
-
-## Testing
-
-The application includes a database connectivity test:
-
+### arAntrlte
 ```bash
 # Compile
 ./mvnw clean compile
@@ -202,12 +164,17 @@ src/
 │   │   │   └── WeeklySummary.java
 │   │   ├── service/
 │   │   │   └── AnalyticsService.java   (Business logic)
-│   │   └── servlet/
-│   │       ├── AddStudentServlet.java
-│   │       ├── AttendanceServlet.java
-│   │       ├── DashboardServlet.java
-│   │       ├── RecordsServlet.java
-│   │       └── StudentsApiServlet.java
+│   │   ├── servlet/
+│   │   │   ├── LoginServlet.java         (Authentication)
+│   │   │   ├── LogoutServlet.java        (Session invalidation)
+│   │   │   ├── SessionInfoServlet.java   (Session info JSON)
+│   │   │   ├── AddStudentServlet.java
+│   │   │   ├── AttendanceServlet.java
+│   │   │   ├── DashboardServlet.java
+│   │   │   ├── RecordsServlet.java
+│   │   │   └── StudentsApiServlet.java
+│   │   └── filter/
+│   │       └── AuthFilter.java            (URL protection & RBAC)
 │   ├── resources/
 │   │   └── config.properties           (Database configuration)
 │   └── webapp/
@@ -237,20 +204,20 @@ src/
 
 ### DAO Pattern
 - **StudentDAO**: Manages student records
-- **AttendanceDAO**: Manages attendance records with upsert logic (insert or update)
-- Both use prepared statements to prevent SQL injection
-
-### Service Layer
-- **AnalyticsService**: Calculates attendance metrics, danger levels, predictions
-- Separates business logic from data access
-
-## Troubleshooting
-
-### Issue: "H2 JDBC driver not found"
+- **Atte└danceDAO**:
+i-*nalticsService**: Calculates attendance metrics, danger levels, predictions
+- Sep araes business logic from data access
+ 
+## Tr oubeshooting
+ h     
+│       ├── access-deniedBC dr          (Access denied page)iver not found"
 **Solution**: Run `./mvnw clean package` to download dependencies
 
 ### Issue: "Database file locked"
-**Solution**: Ensure no other instance is accessing the database. The H2 file is in your project root as `attendance_db.h2.db`
+**Solution**: Ensure no oth
+│       ├── assets/
+│       │   └── css/
+│       │       └── style.csser instance is accessing the database. The H2 file is in your project root as `attendance_db.h2.db`
 
 ### Issue: "Connection refused" (PostgreSQL)
 **Solution**: Verify PostgreSQL is running and connection details in `config.properties` are correct
@@ -276,6 +243,54 @@ src/
 - [ ] Real-time dashboards with WebSockets
 - [ ] Database migration scripts
 
+## License
+
+MIT License - See LICENSE file for details
+leshooting
+
+### Issue: "H2 JDBC driver not found"
+**Soution**: Run `./mvnw clean package` to download dependencies
+
+### Issue: "Database file locked"
+**Solution**: Ensure no othr intance is accessing the database. Te H2 file is in yur prject root as `atendance_db.h2.db`
+
+### Issue: "Connecto refused" (PostreSQL)
+**Solution**: Verify PostgreSQL is running and connection details in `config.properties` are correct
+
+### Issue: "Tables not found"
+**Solution**: Application failed to initialize schema. Check logs and verify database permissions
+
+## Performance Notes
+
+- H2 in-memory mode is excellent for development
+- File-based H2 (default) persists data across restarts
+- PostgreSQL recommended for production with 1000+ students
+- Database indexes optimize attendance queries by student and date
+
+## Future Enhancements
+
+- [x] Role-Based Access Control (RBAC) system
+- [x] Session-based authentication
+- [x] Server-side RBAC checks
+- [ ] JWT-based authentication
+- [ ] REST API endpoints
+- [ ] Mobile-friendly UI
+- [ ] Export to PDF/Excel
+- [ ] Email notifications
+- [ ] Biometric integration
+- [ ] Real-time dashboards with WebSockets
+- [ ] Database migration scripts
+
+## License
+
+MIT License - See LICENSE file for details
+
+## Notes
+
+- Attendance percentage treats both `PRESENT` and `LATE` as attended classes
+- Danger assessment based on 75% threshold (industry standard)
+- Consistency score blends weighted attendance (0.7x for LATE) with stability penalty
+-n l isca[b
 ## License
 
 MIT License - See LICENSE file for details

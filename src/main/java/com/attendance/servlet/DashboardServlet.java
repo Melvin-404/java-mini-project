@@ -11,6 +11,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -25,9 +26,23 @@ public class DashboardServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         int futureClasses = parseFutureClasses(request.getParameter("futureClasses"));
+        HttpSession session = request.getSession(false);
 
         try {
-            List<Student> students = studentDAO.getAllStudents();
+            List<Student> students;
+            
+            // Filter by USN if user is a STUDENT
+            if (session != null && "STUDENT".equals(session.getAttribute("role"))) {
+                String usn = (String) session.getAttribute("usn");
+                Student student = studentDAO.getStudentByUSN(usn);
+                students = new ArrayList<>();
+                if (student != null) {
+                    students.add(student);
+                }
+            } else {
+                students = studentDAO.getAllStudents();
+            }
+            
             List<StudentDashboard> dashboards = new ArrayList<>();
             for (Student student : students) {
                 dashboards.add(analyticsService.buildDashboard(

@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Smart Attendance Management System</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <style>
+        body {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4e8ec 100%);
+        }
+        .login-split {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            width: 100%;
+            max-width: 1000px;
+            min-height: 600px;
+            background: var(--surface);
+            border-radius: 24px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        .login-left {
+            background: linear-gradient(135deg, var(--primary) 0%, #6da6ea 100%);
+            padding: 48px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            color: #fff;
+        }
+        .login-left .brand-badge {
+            background: rgba(255, 255, 255, 0.2);
+            color: #fff;
+            width: 72px;
+            height: 72px;
+            font-size: 1.8rem;
+            margin-bottom: 24px;
+        }
+        .login-left h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            margin: 0 0 16px 0;
+        }
+        .login-left p {
+            font-size: 1rem;
+            opacity: 0.9;
+            line-height: 1.6;
+            margin: 0;
+        }
+        .login-right {
+            padding: 48px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        .login-header {
+            margin-bottom: 32px;
+        }
+        .login-header h2 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin: 0 0 8px 0;
+            color: var(--text);
+        }
+        .login-header p {
+            margin: 0;
+            color: var(--muted);
+            font-size: 0.95rem;
+        }
+        .error-message {
+            background: rgba(217, 108, 108, 0.18);
+            color: #9a3f3f;
+            padding: 12px 14px;
+            border-radius: 14px;
+            margin-bottom: 20px;
+            font-weight: 500;
+        }
+        .usn-field {
+            display: none;
+        }
+        .usn-field.visible {
+            display: block;
+        }
+        .demo-credentials {
+            margin-top: 24px;
+            padding: 16px;
+            background: var(--surface-soft);
+            border-radius: 12px;
+            border: 1px solid var(--border);
+        }
+        .demo-credentials h4 {
+            margin: 0 0 12px 0;
+            font-size: 0.9rem;
+            color: var(--muted);
+        }
+        .demo-credentials p {
+            margin: 4px 0;
+            font-size: 0.85rem;
+            color: var(--text);
+        }
+        .demo-credentials strong {
+            color: var(--primary);
+        }
+        @media (max-width: 768px) {
+            .login-split {
+                grid-template-columns: 1fr;
+                min-height: auto;
+                margin: 20px;
+            }
+            .login-left {
+                padding: 32px;
+            }
+            .login-right {
+                padding: 32px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="login-split">
+        <div class="login-left">
+            <div class="brand-badge">SA</div>
+            <h1>Smart Attendance Management</h1>
+            <p>Track attendance, monitor student progress, and ensure academic success with our intelligent attendance tracking system.</p>
+        </div>
+        <div class="login-right">
+            <div class="login-header">
+                <h2>Welcome Back</h2>
+                <p>Sign in to continue to your dashboard</p>
+            </div>
+            
+            <%
+                String error = request.getParameter("error");
+                if ("true".equals(error)) {
+            %>
+            <div class="error-message">Invalid username or password</div>
+            <%
+                }
+            %>
+            
+            <form action="LoginServlet" method="post" class="input-grid" onsubmit="return validateLoginForm()">
+                <div class="input-row">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" name="username" required placeholder="Enter your username" minlength="3" maxlength="50">
+                </div>
+                
+                <div class="input-row">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" required placeholder="Enter your password" minlength="6" maxlength="100">
+                </div>
+                
+                <div class="input-row">
+                    <label for="role">Role</label>
+                    <select id="role" name="role" required onchange="toggleUSNField()">
+                        <option value="">Select your role</option>
+                        <option value="TEACHER">Teacher</option>
+                        <option value="STUDENT">Student</option>
+                    </select>
+                </div>
+                
+                <div class="input-row usn-field" id="usnField">
+                    <label for="usn">USN (University Serial Number)</label>
+                    <input type="text" id="usn" name="usn" placeholder="e.g., 22CS001" pattern="[A-Za-z0-9]+" minlength="5" maxlength="50">
+                </div>
+                
+                <button type="submit">Sign In</button>
+            </form>
+            
+            <div class="demo-credentials">
+                <h4>Demo Credentials</h4>
+                <p><strong>Teacher:</strong> teacher / teacher123</p>
+                <p><strong>Student:</strong> student / student123 (USN: 22CS001)</p>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        function toggleUSNField() {
+            const role = document.getElementById('role').value;
+            const usnField = document.getElementById('usnField');
+            const usnInput = document.getElementById('usn');
+            
+            if (role === 'STUDENT') {
+                usnField.classList.add('visible');
+                usnInput.required = true;
+            } else {
+                usnField.classList.remove('visible');
+                usnInput.required = false;
+                usnInput.value = '';
+            }
+        }
+
+        function validateLoginForm() {
+            const username = document.getElementById('username').value.trim();
+            const password = document.getElementById('password').value;
+            const role = document.getElementById('role').value;
+            const usn = document.getElementById('usn').value.trim();
+            
+            if (username.length < 3) {
+                alert('Username must be at least 3 characters long.');
+                return false;
+            }
+            
+            if (password.length < 6) {
+                alert('Password must be at least 6 characters long.');
+                return false;
+            }
+            
+            if (!role) {
+                alert('Please select a role.');
+                return false;
+            }
+            
+            if (role === 'STUDENT' && usn.length < 5) {
+                alert('USN must be at least 5 characters long.');
+                return false;
+            }
+            
+            if (role === 'STUDENT' && !/^[A-Za-z0-9]+$/.test(usn)) {
+                alert('USN can only contain letters and numbers.');
+                return false;
+            }
+            
+            return true;
+        }
+    </script>
+</body>
+</html>

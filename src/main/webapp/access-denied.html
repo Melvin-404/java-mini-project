@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Access Denied - Smart Attendance Management System</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <style>
+        body {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4e8ec 100%);
+        }
+        .access-denied-container {
+            width: 100%;
+            max-width: 500px;
+            padding: 28px;
+        }
+        .access-denied-card {
+            background: var(--surface);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow);
+            padding: 48px 40px;
+            border: 1px solid rgba(219, 227, 232, 0.8);
+            text-align: center;
+        }
+        .icon-wrapper {
+            width: 80px;
+            height: 80px;
+            background: rgba(217, 108, 108, 0.16);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 24px;
+        }
+        .icon-wrapper svg {
+            width: 40px;
+            height: 40px;
+            color: #9a3f3f;
+        }
+        .access-denied-card h1 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin: 0 0 12px 0;
+            color: var(--text);
+        }
+        .access-denied-card p {
+            color: var(--muted);
+            font-size: 0.95rem;
+            line-height: 1.6;
+            margin: 0 0 32px 0;
+        }
+        .button-group {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+        }
+        .button-group .button {
+            min-width: 120px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="access-denied-container">
+        <div class="access-denied-card">
+            <div class="icon-wrapper">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                </svg>
+            </div>
+            <h1>Access Denied</h1>
+            <p>You don't have permission to access this page. Please contact your administrator if you believe this is an error.</p>
+            <div class="button-group">
+                <a class="button" href="index.html">Go to Home</a>
+                <a class="button secondary" href="login.html">Login Again</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

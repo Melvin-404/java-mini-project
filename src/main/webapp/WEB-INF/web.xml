@@ -57,6 +57,42 @@
         <url-pattern>/api/students</url-pattern>
     </servlet-mapping>
     
+    <servlet>
+        <servlet-name>LoginServlet</servlet-name>
+        <servlet-class>com.attendance.servlet.LoginServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>LoginServlet</servlet-name>
+        <url-pattern>/LoginServlet</url-pattern>
+    </servlet-mapping>
+    
+    <servlet>
+        <servlet-name>LogoutServlet</servlet-name>
+        <servlet-class>com.attendance.servlet.LogoutServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>LogoutServlet</servlet-name>
+        <url-pattern>/LogoutServlet</url-pattern>
+    </servlet-mapping>
+    
+    <servlet>
+        <servlet-name>SessionInfoServlet</servlet-name>
+        <servlet-class>com.attendance.servlet.SessionInfoServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>SessionInfoServlet</servlet-name>
+        <url-pattern>/SessionInfoServlet</url-pattern>
+    </servlet-mapping>
+    
+    <filter>
+        <filter-name>AuthFilter</filter-name>
+        <filter-class>com.attendance.filter.AuthFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>AuthFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+    
     <!-- Welcome Files -->
     <welcome-file-list>
         <welcome-file>index.html</welcome-file>

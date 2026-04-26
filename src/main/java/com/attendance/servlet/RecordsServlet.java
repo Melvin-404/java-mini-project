@@ -3,12 +3,14 @@ package com.attendance.servlet;
 import com.attendance.dao.AttendanceDAO;
 import com.attendance.dao.StudentDAO;
 import com.attendance.model.AttendanceRecord;
+import com.attendance.model.Student;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -25,10 +27,21 @@ public class RecordsServlet extends HttpServlet {
         String studentIdParam = request.getParameter("studentId");
         String startDateParam = request.getParameter("startDate");
         String endDateParam = request.getParameter("endDate");
+        HttpSession session = request.getSession(false);
 
         try {
             List<AttendanceRecord> records;
-            if (studentIdParam != null && !studentIdParam.isBlank()) {
+            
+            // Filter by USN if user is a STUDENT
+            if (session != null && "STUDENT".equals(session.getAttribute("role"))) {
+                String usn = (String) session.getAttribute("usn");
+                Student student = studentDAO.getStudentByUSN(usn);
+                if (student != null) {
+                    records = attendanceDAO.getAttendanceByStudent(student.getId());
+                } else {
+                    records = new ArrayList<>();
+                }
+            } else if (studentIdParam != null && !studentIdParam.isBlank()) {
                 records = attendanceDAO.getAttendanceByStudent(Integer.parseInt(studentIdParam));
             } else {
                 records = attendanceDAO.getAllAttendanceRecords();

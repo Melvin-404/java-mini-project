@@ -55,4 +55,22 @@ public class StudentDAO {
         }
         return null;
     }
+
+    public Student getStudentByUSN(String usn) throws SQLException {
+        String sql = "SELECT id, name, usn FROM students WHERE usn = ?";
+        try (Connection connection = DBConnection.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setString(1, usn);
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next()) {
+                    return new Student(
+                            resultSet.getInt("id"),
+                            resultSet.getString("name"),
+                            resultSet.getString("usn")
+                    );
+                }
+            }
+        }
+        return null;
+    }
 }

@@ -3,10 +3,10 @@ package com.attendance.servlet;
 import com.attendance.dao.AttendanceDAO;
 
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import java.io.IOException;
 import java.net.URLEncoder;
@@ -19,6 +19,13 @@ public class AttendanceServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        // Server-side RBAC check: Only TEACHER can mark attendance
+        HttpSession session = request.getSession(false);
+        if (session == null || !"TEACHER".equals(session.getAttribute("role"))) {
+            response.sendRedirect(request.getContextPath() + "/access-denied.html");
+            return;
+        }
+
         String message;
         try {
             int studentId = Integer.parseInt(request.getParameter("studentId"));

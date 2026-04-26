@@ -21,20 +21,29 @@
         </div>
         <nav class="nav-menu">
             <a class="nav-link" href="index.html">Home</a>
-            <a class="nav-link active" href="addStudent.html">Add Student</a>
-            <a class="nav-link" href="markAttendance.html">Mark Attendance</a>
+            <a class="nav-link active" id="nav-add-student" href="addStudent.html">Add Student</a>
+            <a class="nav-link" id="nav-mark-attendance" href="markAttendance.html">Mark Attendance</a>
             <a class="nav-link" href="dashboard">Dashboard</a>
             <a class="nav-link" href="records">View Records</a>
+            <a class="nav-link" href="LogoutServlet" style="margin-top: auto; color: var(--danger);">Logout</a>
         </nav>
+        <div id="userInfo" style="margin-top: 20px; padding: 12px; background: var(--surface-soft); border-radius: 12px; font-size: 0.88rem;">
+            <div id="usernameDisplay"></div>
+            <div id="roleBadge" style="margin-top: 8px;"></div>
+        </div>
     </aside>
 
     <main class="main-content">
-        <div class="topbar">
+        <header class="page-header">
+            <h1>Add Student</h1>
+            <p>Add new students to the attendance system</p>
+        </header>
+        <section class="grid-4">
             <div>
                 <h1 class="page-title">Student Management</h1>
                 <p class="page-subtitle">Add student details and keep the class list organized with name and USN.</p>
             </div>
-        </div>
+        </section>
 
         <div class="grid-2">
             <section class="surface-card">
@@ -103,6 +112,71 @@
             document.getElementById('studentTableBody').innerHTML =
                 '<tr><td colspan="2" class="muted">Unable to load students. Check database connection.</td></tr>';
         });
+</script>
+
+<script>
+    async function checkRole() {
+        try {
+            const res = await fetch('SessionInfoServlet');
+            const data = await res.json();
+            window.userRole = data.role;
+            window.username = data.username;
+            applyRBAC(data.role, data.username);
+        } catch (error) {
+            console.error('Failed to fetch session info:', error);
+        }
+    }
+
+    function applyRBAC(role, username) {
+        // Display username and role badge
+        const usernameDisplay = document.getElementById('usernameDisplay');
+        const roleBadge = document.getElementById('roleBadge');
+        
+        if (username) {
+            usernameDisplay.innerHTML = '<strong>' + username + '</strong>';
+        }
+        
+        if (role) {
+            const badgeColor = role === 'TEACHER' ? 'background: rgba(74, 144, 226, 0.16); color: #4a90e2;' : 'background: rgba(97, 112, 124, 0.16); color: #61707c;';
+            roleBadge.innerHTML = '<span class="badge" style="' + badgeColor + '">' + role.charAt(0) + role.slice(1).toLowerCase() + '</span>';
+        }
+        
+        // Redirect STUDENT away from this page
+        if (role === 'STUDENT') {
+            alert('Access denied: Students cannot add students.');
+            window.location.href = 'index.html';
+        }
+        
+        // Hide sidebar navigation items for STUDENT
+        if (role === 'STUDENT') {
+            document.getElementById('nav-add-student').style.display = 'none';
+            document.getElementById('nav-mark-attendance').style.display = 'none';
+        }
+    }
+
+    checkRole();
+
+    function validateAddStudentForm() {
+        const name = document.getElementById('name').value.trim();
+        const usn = document.getElementById('usn').value.trim();
+        
+        if (name.length < 2) {
+            alert('Name must be at least 2 characters long.');
+            return false;
+        }
+        
+        if (usn.length < 5) {
+            alert('USN must be at least 5 characters long.');
+            return false;
+        }
+        
+        if (!/^[A-Za-z0-9]+$/.test(usn)) {
+            alert('USN can only contain letters and numbers.');
+            return false;
+        }
+        
+        return true;
+    }
 </script>
 </body>
 </html>

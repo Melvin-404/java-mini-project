@@ -21,14 +21,23 @@
         </div>
         <nav class="nav-menu">
             <a class="nav-link active" href="index.html">Home</a>
-            <a class="nav-link" href="addStudent.html">Add Student</a>
-            <a class="nav-link" href="markAttendance.html">Mark Attendance</a>
+            <a class="nav-link" id="nav-add-student" href="addStudent.html">Add Student</a>
+            <a class="nav-link" id="nav-mark-attendance" href="markAttendance.html">Mark Attendance</a>
             <a class="nav-link" href="dashboard">Dashboard</a>
             <a class="nav-link" href="records">View Records</a>
+            <a class="nav-link" href="LogoutServlet" style="margin-top: auto; color: var(--danger);">Logout</a>
         </nav>
+        <div id="userInfo" style="margin-top: 20px; padding: 12px; background: var(--surface-soft); border-radius: 12px; font-size: 0.88rem;">
+            <div id="usernameDisplay"></div>
+            <div id="roleBadge" style="margin-top: 8px;"></div>
+        </div>
     </aside>
 
     <main class="main-content">
+        <header class="page-header">
+            <h1>Home</h1>
+            <p>Welcome to the Student Attendance Management System</p>
+        </header>
         <div class="topbar">
             <div>
                 <h2 class="page-title">Smart Attendance Management System</h2>
@@ -64,8 +73,9 @@
             <div class="surface-card">
                 <h3 class="section-title">Quick Actions</h3>
                 <div class="info-list">
-                    <a class="button" href="addStudent.html">Add a Student</a>
-                    <a class="button secondary" href="markAttendance.html">Mark Daily Attendance</a>
+                    <a class="button" id="btn-add-student" href="addStudent.html">Add a Student</a>
+                    <a class="button" id="btn-view-attendance" href="dashboard" style="display: none;">View My Attendance</a>
+                    <a class="button secondary" id="btn-mark-attendance" href="markAttendance.html">Mark Daily Attendance</a>
                     <a class="button secondary" href="records">View Attendance History</a>
                 </div>
             </div>
@@ -91,5 +101,45 @@
         </section>
     </main>
 </div>
+
+<script>
+    async function checkRole() {
+        try {
+            const res = await fetch('SessionInfoServlet');
+            const data = await res.json();
+            window.userRole = data.role;
+            window.username = data.username;
+            applyRBAC(data.role, data.username);
+        } catch (error) {
+            console.error('Failed to fetch session info:', error);
+        }
+    }
+
+    function applyRBAC(role, username) {
+        // Display username and role badge
+        const usernameDisplay = document.getElementById('usernameDisplay');
+        const roleBadge = document.getElementById('roleBadge');
+        
+        if (username) {
+            usernameDisplay.innerHTML = '<strong>' + username + '</strong>';
+        }
+        
+        if (role) {
+            const badgeColor = role === 'TEACHER' ? 'background: rgba(74, 144, 226, 0.16); color: #4a90e2;' : 'background: rgba(97, 112, 124, 0.16); color: #61707c;';
+            roleBadge.innerHTML = '<span class="badge" style="' + badgeColor + '">' + role.charAt(0) + role.slice(1).toLowerCase() + '</span>';
+        }
+        
+        // Hide/show buttons based on role
+        if (role === 'STUDENT') {
+            document.getElementById('btn-add-student').style.display = 'none';
+            document.getElementById('btn-mark-attendance').style.display = 'none';
+            document.getElementById('btn-view-attendance').style.display = 'block';
+            document.getElementById('nav-add-student').style.display = 'none';
+            document.getElementById('nav-mark-attendance').style.display = 'none';
+        }
+    }
+
+    checkRole();
+</script>
 </body>
 </html>
